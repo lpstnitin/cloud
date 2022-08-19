@@ -1,0 +1,57 @@
+Daemonset
+
+DaemonSets can improve the performance of a Kubernetes cluster by distributing maintenance tasks and support services via deploying Pods across all nodes. They are well suited for long-running services like monitoring or log collectio
+
+You have existing 3 node kubernetes setup (1 master node & 2 worker node)
+From master run this command and ensure all nodess are ready state
+
+kubectl get nodes
+
+If all nodes are ready state then we can start the below daemonset handson lab.
+
+goto mater node and run the below yaml file
+
+
+kubectl apply -f https://raw.githubusercontent.com/cloudnloud/Kubernetes_Admin_Training/main/class10-Daemonset/daemonset-nginx.yaml
+
+kubectl get all
+
+see now daemonset is 2 and running in each worker/client node.because daemonset is mandatory for each worker or client node.
+
+We have 1 master node 2 worker node now.So create one more worker node (3rd worker node).
+
+Now you need a kubernetes cluster join command with secret.so go to kube master node and run the below command.
+
+kubeadm token create --print-join-command
+
+(This command will help you to add more worker nodes whenever you want to add to KUBE cluster.Whenevr you want to add you need the kubeadm join command with new key and new hash key algorithm.Thats is where this command will help.However this command you must run only in KUBE master server.You shouldnt run from any worker nodes)
+(you get some output from this command.
+
+Now you have command with token to join in the exiting kube cluster.Login to 4th new worker node and run that kubeadm join command.
+
+Note: 3rd new worker need tohave all packages installed as we explained in class 3 k8s installation class.
+
+https://github.com/cloudnloud/Kubernetes_Admin_Training/tree/main/class3-k8s-installation
+
+before you join new worker node in master run the below command
+
+watch -n 1 kubectl get all
+
+go to master node and run the below command
+
+kubectl get nodes
+
+you  must see all nodes are ready state.
+
+
+
+in master run kubectl get all
+
+now you see daemonset will 3 previously it was 2 (1 node - 1 daemonset is running + 1 node - 1 daemonset + 1 new node - 1 daemonset is running).
+
+kubectl exec -ti pod/nginx-6jlrm bash (loging into one of the pod)
+
+once i configured automatically if i add any linux machine then in that linux machine this ngnix also will be deployed
+
+kubectl get daemonsets
+kubectl descibe daemonsets
